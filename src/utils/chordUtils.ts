@@ -35,121 +35,89 @@ const EXTENSIONS: { [key: string]: ChordNote[] } = {
   '13': [{ interval: '13', semitones: 21 }],   // Major thirteenth
 };
 
-// Helper function to get implied extensions
+const IMPLIED_EXTENSION_ORDER = ['7', '9', '11', '13'];
+
 const getImpliedExtensions = (extension: string, isMajor = false): string[] => {
+  const maxIndex = IMPLIED_EXTENSION_ORDER.indexOf(extension);
+  if (maxIndex <= 0) return [];
+
+  // Nur Extensions hinzufügen, die "kleiner" sind
+  const implied = IMPLIED_EXTENSION_ORDER.slice(0, maxIndex);
+
+  // Für maj7 dürfen keine Dominant-Erweiterungen kommen (z. B. keine ♭7)
   if (isMajor) {
-    switch (extension) {
-      case '9':
-        return [];
-      case '11':
-        return [];
-      case '13':
-        return [];
-      default:
-        return [];
-    }
+    return implied.filter(e => e !== '7'); // z. B. nur 9 bei maj13
   }
 
-  switch (extension) {
-    case '9':
-      return ['7'];
-    case '11':
-      return ['7', '9'];
-    case '13':
-      return ['7', '9', '11'];
-    default:
-      return [];
-  }
+  return implied;
 };
 
 export const parseChord = (chordName?: string): ChordParseResult => {
-  if (!chordName) {
-    return {
-      isValid: false,
-      error: 'Please enter a chord name'
-    };
+  if (!chordName?.trim()) {
+    return { isValid: false, error: 'Please enter a chord name' };
   }
 
-  if (!chordName.trim()) {
-    return {
-      isValid: false,
-      error: 'Please enter a chord name'
-    };
-  }
-
-  // First, extract the root note
   const rootMatch = chordName.match(/^([A-G][#b]?)/);
   if (!rootMatch) {
-    return {
-      isValid: false,
-      error: 'Invalid root note. Must start with A-G'
-    };
+    return { isValid: false, error: 'Invalid root note. Must start with A-G' };
   }
 
   const root = rootMatch[1];
   let remaining = chordName.slice(root.length);
 
-  // Check for maj7 first
   let extensions: string[] = [];
-  let quality = 'major'; // default quality
+  let quality = 'major'; // default
   let hasMajor = false;
 
-  if (remaining.startsWith('maj')) {
-    // Handle maj7, maj9, maj11, maj13
-    remaining = remaining.slice(3);
-    const extMatch = remaining.match(/^(7|9|11|13)/);
-    if (extMatch) {
-      const ext = extMatch[1];
-      extensions.push('maj7');
-      hasMajor = true;
-      if (ext !== '7') {
-        extensions.push(ext);
-        // Add implied extensions for 9, 11, 13
+  const matchAndConsume = (prefix: string): boolean => {
+    if (remaining.startsWith(prefix)) {
+      remaining = remaining.slice(prefix.length);
+      return true;
+    }
+    return false;
+  };
+
+  // Detect chord quality
+  if (matchAndConsume('maj')) {
+    hasMajor = true;
+    if (remaining.match(/^(7|9|11|13)/)) {
+      const ext = remaining.match(/^(7|9|11|13)/)![1];
+      if (ext === '7') {
+        extensions.push('maj7');
+      } else {
+        extensions.push('maj7', ext);
         extensions.push(...getImpliedExtensions(ext, true));
       }
       remaining = remaining.slice(ext.length);
     }
-  } else if (remaining.startsWith('m')) {
-    quality = 'minor';
-    remaining = remaining.slice(1);
-  } else if (remaining.startsWith('dim')) {
+  } else if (matchAndConsume('dim')) {
     quality = 'dim';
-    remaining = remaining.slice(3);
-  } else if (remaining.startsWith('aug')) {
+  } else if (matchAndConsume('aug')) {
     quality = 'aug';
-    remaining = remaining.slice(3);
+  } else if (matchAndConsume('m') || matchAndConsume('-')) {
+    quality = 'minor';
   }
 
-  // Parse remaining extensions
+  // Check for remaining extensions
   while (remaining.length > 0) {
-    let found = false;
-    for (const ext of Object.keys(EXTENSIONS)) {
-      if (remaining.startsWith(ext)) {
-        extensions.push(ext);
-        // Add implied extensions
-        extensions.push(...getImpliedExtensions(ext, hasMajor));
-        remaining = remaining.slice(ext.length);
-        found = true;
-        break;
-      }
-    }
-    if (!found) break;
+    const matchedExt = Object.keys(EXTENSIONS).find(ext => remaining.startsWith(ext));
+    if (!matchedExt) break;
+
+    extensions.push(matchedExt);
+    extensions.push(...getImpliedExtensions(matchedExt, hasMajor));
+    remaining = remaining.slice(matchedExt.length);
   }
 
-  // Remove duplicates and sort extensions
+  // Remove duplicates
   extensions = [...new Set(extensions)];
 
   const baseNotes = CHORD_QUALITIES[quality];
-  const extensionNotes = extensions.flatMap(ext => EXTENSIONS[ext]);
+  const extensionNotes = extensions.flatMap(ext => EXTENSIONS[ext] || []);
 
-  const notes = [...baseNotes, ...extensionNotes].map(note => {
-    return {
-      ...note,
-      note: shiftNote(
-        { note: root, octave: 4 },
-        note.semitones).note, // Set the root note for each chord note
-    };
-  });
+  const notes = [...baseNotes, ...extensionNotes].map(note => ({
+    ...note,
+    note: shiftNote({ note: root, octave: 4 }, note.semitones).note,
+  }));
 
   return {
     isValid: true,
@@ -161,4 +129,3 @@ export const parseChord = (chordName?: string): ChordParseResult => {
     }
   };
 };
-
