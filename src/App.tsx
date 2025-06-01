@@ -6,14 +6,6 @@ import { parseChord } from './utils/chordUtils'
 import './App.css'
 import type { ScaleType } from './types'
 
-/**
- * The main application component for the Push Chord Grid app.
- *
- * This app generates chord and scale layouts for Ableton Push, allowing users to explore different chords and scales interactively.
- * 
- * Note: This project is currently in Alpha. Please verify the generated results for correctness.
- * If you encounter any issues or bugs, feel free to report them on the project's GitHub page.
- */
 function App() {
   const [currentChord, setCurrentChord] = useState('Cmaj7')
   const [scaleRoot, setScaleRoot] = useState('C')
@@ -27,7 +19,9 @@ function App() {
       <h1>Push Chord Grid</h1>
       <p className="app-description">
         This app generates chords for Ableton Push. It is still in Alpha, so please check if the results are correct.
-        Feel free to report bugs on the GitHub page.
+        Feel free to report bugs on the <a href='https://github.com/marthoff/push-chords' target='_blank' rel='noopener noreferrer'>
+          GitHub Repository
+        </a>.
       </p>
       <div className="controls">
         <ChordInput

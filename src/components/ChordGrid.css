@@ -47,8 +47,8 @@
 }
 
 .grid-cell.out-of-scale {
-  opacity: 0.35;
-  filter: grayscale(0.3);
+  opacity: 0.9;
+  filter: grayscale(0.1);
 }
 
 .grid-cell:hover:not(.out-of-scale) {
