@@ -26,11 +26,17 @@ const ChordGrid: React.FC<ChordGridProps> = ({
               key={`${rowIndex}-${colIndex}`}
               className={`grid-cell 
                 ${cell.inScale ? '' : 'out-of-scale'}
-                ${cell.chordNote ? 'chord-note' : ''}`}
+                ${cell.chordNote ? 'chord-note' : ''}
+                ${cell.isRoot ? 'root-note' : ''}`}
+              tabIndex={0}
+              aria-label={`Note ${cell.note.note}${cell.note.octave}${cell.chordNote ? ', interval ' + cell.chordNote.interval : ''}`}
             >
               {cell.note && (
                 <>
-                  <div className="note">{cell.note.note} {cell.chordNote?.interval}</div>
+                  <div className="note-main">{cell.note.note}</div>
+                  {cell.chordNote?.interval && (
+                    <span className="interval-badge">{cell.chordNote.interval}</span>
+                  )}
                 </>
               )}
             </div>
@@ -41,4 +47,4 @@ const ChordGrid: React.FC<ChordGridProps> = ({
   );
 };
 
-export default ChordGrid; 
+export default ChordGrid;

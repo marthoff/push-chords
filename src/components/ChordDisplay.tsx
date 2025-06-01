@@ -16,26 +16,27 @@ const ChordDisplay: React.FC<ChordDisplayProps> = ({
 
   const { chord } = parseResult;
   const extensionText = chord.extensions.length > 0
-    ? ` with ${chord.extensions.join(', ')}`
+    ? chord.extensions.join(', ')
     : '';
 
   const isInScale = (note: string) => {
     return scale.notes.includes(note);
   }
 
-
   return (
     <div className="chord-display">
       <div className="chord-info">
-        {chord.root} {chord.quality}{extensionText} {scale.name}
+        <span className="chord-badge">{chord.root} {chord.quality}</span>
+        {extensionText && <span className="extension-badge">{extensionText}</span>}
       </div>
       <div className="notes-info">
-        Notes: {chord.notes.map((note, index) => (
+        {chord.notes.map((note, index) => (
           <span
             key={index}
             className={`note ${isInScale(note.note) ? 'in-scale' : 'out-of-scale'}`}
           >
-            {note.interval}
+            {note.note}
+            <span className="interval-inline">{note.interval}</span>
             {index < chord.notes.length - 1 ? ', ' : ''}
           </span>
         ))}
@@ -44,4 +45,4 @@ const ChordDisplay: React.FC<ChordDisplayProps> = ({
   );
 };
 
-export default ChordDisplay; 
+export default ChordDisplay;
