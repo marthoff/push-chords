@@ -1,0 +1,49 @@
+.chord-input-container {
+  margin-bottom: 20px;
+}
+
+.chord-input-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.chord-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #3a3a3a;
+  border-radius: 6px;
+  background-color: #2a2a2a;
+  color: white;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.chord-input:focus {
+  border-color: #4a90e2;
+}
+
+.chord-input::placeholder {
+  color: #666;
+}
+
+.chord-submit {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chord-submit:hover {
+  background-color: #357abd;
+}
+
+.chord-submit:active {
+  background-color: #2868a9;
+} 

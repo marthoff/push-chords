@@ -1,0 +1,42 @@
+.chord-display {
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin-bottom: 20px;
+}
+
+.chord-display.error {
+  color: #e24a4a;
+}
+
+.chord-info {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.scale-info {
+  font-size: 16px;
+  color: #4a90e2;
+  margin-bottom: 10px;
+}
+
+.notes-info {
+  font-size: 14px;
+  color: #888;
+}
+
+.note {
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: #3a3a3a;
+  margin: 0 2px;
+}
+
+.note.out-of-scale {
+  color: #e24a4a;
+  background-color: #4a2a2a;
+} 

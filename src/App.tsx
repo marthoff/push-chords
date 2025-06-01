@@ -1,34 +1,70 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import ChordGrid from './components/ChordGrid'
+import ChordInput from './components/ChordInput'
+import ChordDisplay from './components/ChordDisplay'
+import { parseChord } from './utils/chordUtils'
 import './App.css'
+import type { ScaleType } from './types'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentChord, setCurrentChord] = useState('Cmaj7')
+  const [scaleRoot, setScaleRoot] = useState('C')
+  const [scaleType, setScaleType] = useState<ScaleType>('Major')
+  const [chromaticMode, setChromaticMode] = useState(false)
+
+  const parseResult = parseChord(currentChord)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <h1>Push Chord Grid</h1>
+      <div className="controls">
+        <ChordInput
+          currentChord={currentChord}
+          onChordChange={setCurrentChord}
+        />
+        <div className="scale-controls">
+          <>
+            <select
+              value={scaleRoot}
+              onChange={(e) => setScaleRoot(e.target.value)}
+              className="root-select"
+            >
+              {['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'].map(note => (
+                <option key={note} value={note}>{note}</option>
+              ))}
+            </select>
+            <select
+              value={scaleType}
+              onChange={(e) => setScaleType(e.target.value as ScaleType)}
+              className="scale-type-select"
+            >
+              <option value="Major">Major</option>
+              <option value="Minor">Minor</option>
+              <option value="Chromatic">Chromatic</option>
+            </select>
+            <label className="chromatic-mode">
+              <input
+                type="checkbox"
+                checked={chromaticMode}
+                onChange={(e) => setChromaticMode(e.target.checked)}
+              />
+              Chromatic Mode
+            </label>
+          </>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <ChordDisplay
+        parseResult={parseResult}
+        scaleRoot={scaleRoot}
+        scaleType={scaleType}
+      />
+      <ChordGrid
+        chord={currentChord}
+        scaleRoot={scaleRoot}
+        scaleType={scaleType}
+        chromaticMode={chromaticMode}
+      />
+    </div>
   )
 }
 
