@@ -1,4 +1,4 @@
-import type { GridCell, Note, Scale, UniversalScale } from "../types";
+import type { GridCell, Note, ParsedChord, Scale, UniversalScale } from "../types";
 import { parseChord } from "./chordUtils";
 
 export const NOTES: string[] = [
@@ -55,7 +55,7 @@ export const buildScale = (scale: UniversalScale, rootNote: string): Scale => {
     };
 }
 
-export const buildGrid = (scale: Scale, chord?: string, referenceScale?: Scale,): GridCell[][] => {
+export const buildGrid = (scale: Scale, parsedChord?: ParsedChord, referenceScale?: Scale,): GridCell[][] => {
     const grid: GridCell[][] = [];
     const rootNote = scale.rootNote;
     const startNote: Note = {
@@ -65,7 +65,6 @@ export const buildGrid = (scale: Scale, chord?: string, referenceScale?: Scale,)
     if (!referenceScale) {
         referenceScale = scale; // Use the same scale if no reference is provided
     }
-    const parsedChord = parseChord(chord);
 
     // Calculate fourth offset
     const offset = scale.intervals.length > 8 ? 3 : 4
@@ -82,8 +81,8 @@ export const buildGrid = (scale: Scale, chord?: string, referenceScale?: Scale,)
                 note: note,
                 octave: Math.floor(index / noteSet.length) + startNote.octave
             };
-            const chordNote = parsedChord.chord?.notes
-                .find(n => n.note === noteObj.note);
+            const chordNote = parsedChord ? parsedChord.notes
+                .find(n => n.note === noteObj.note) : undefined;
             const inScale = referenceScale.notes.includes(note);
             row.push({
                 note: noteObj,

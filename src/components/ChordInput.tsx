@@ -1,35 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { parseChord } from '../utils/chordUtils';
-import './ChordInput.css';
-import type { ChordInputProps } from '../types';
+import React, { useState } from 'react';
+import { usePushChordStore } from '../store/pushChordStore';
+import ChordDisplay from './ChordDisplay';
 
-const ChordInput: React.FC<ChordInputProps> = ({ onChordChange, currentChord }) => {
-  const [inputValue, setInputValue] = useState(currentChord);
-  const parseResult = parseChord(inputValue);
+const ChordInput: React.FC = () => {
+  const [inputValue, setInputValue] = useState("");
 
-  useEffect(() => {
-    // Only update the grid if the chord is valid
-    if (parseResult.isValid && parseResult.chord) {
-      onChordChange(inputValue);
-    }
-  }, [inputValue, onChordChange]);
+  const parseChord = usePushChordStore((state) => state.parseChord);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    parseChord(e.target.value);
     setInputValue(e.target.value);
   };
 
   return (
-    <div className="chord-input-container">
+    <div className="chord-input-container p-2 m-2 rounded-sm  col-span-2">
       <form className="chord-input-form" onSubmit={(e) => e.preventDefault()}>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleChange}
-          placeholder="Enter chord (e.g. Cmaj7, Am9, G13)"
-          className="chord-input"
-        />
-      </form>
-    </div>
+        <label htmlFor="chord-input" className="block text-sm/6 font-medium text-gray-200">
+          Enter chord (e.g. Cmaj7, Am9, G13)
+        </label>
+        <div className='flex items-center rounded-md 
+        bg-white pl-3 outline-1 -outline-offset-1 
+        outline-gray-300 focus-within:outline-2 
+        focus-within:-outline-offset-2 focus-within:outline-blue-500'>
+          <input
+            id="chord-input"
+            name="chord-input"
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            placeholder="Enter chord (e.g. Cmaj7, Am9, G13)"
+            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-3xl text-gray-900 placeholder:text-gray-400 
+            focus:outline-none 
+            sm:text-3xl"
+          />
+        </div>
+        <div className='text-gray-200'>
+          <ChordDisplay />
+
+        </div>
+      </form >
+    </div >
   );
 };
 

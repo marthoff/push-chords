@@ -1,20 +1,20 @@
 import React from 'react';
-import './ChordDisplay.css';
-import type { ChordDisplayProps } from '../types';
 import { buildScale, SCALES } from '../utils/musicUtils';
+import { usePushChordStore } from '../store/pushChordStore';
 
-const ChordDisplay: React.FC<ChordDisplayProps> = ({
-  scaleRoot,
-  scaleType,
-  parseResult,
+const ChordDisplay: React.FC = ({
 }) => {
-  if (!parseResult.isValid || !parseResult.chord) {
-    return <div className="chord-display error">{parseResult.error}</div>;
+  const error = usePushChordStore((state) => state.error);
+  const scaleType = usePushChordStore((state) => state.scaleType);
+  const scaleRoot = usePushChordStore((state) => state.scaleRoot);
+  const chord = usePushChordStore((state) => state.chord);
+
+  if (error || !chord) {
+    return <div className="chord-display">{error}</div>;
   }
 
   const scale = buildScale(SCALES[scaleType || 'Major'], scaleRoot || 'C');
 
-  const { chord } = parseResult;
   const extensionText = chord.extensions.length > 0
     ? chord.extensions.join(', ')
     : '';
@@ -36,7 +36,7 @@ const ChordDisplay: React.FC<ChordDisplayProps> = ({
             className={`note ${isInScale(note.note) ? 'in-scale' : 'out-of-scale'}`}
           >
             {note.note}
-            <span className="interval-inline">{note.interval}</span>
+            <span className="text-sm">{note.interval}</span>
             {index < chord.notes.length - 1 ? ', ' : ''}
           </span>
         ))}

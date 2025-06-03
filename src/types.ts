@@ -49,20 +49,3 @@ export type ChordParseResult = {
 
 export type ScaleType = 'Major' | 'Minor' | 'Chromatic';
 
-export interface ChordGridProps {
-    chord: string;
-    chromaticMode?: boolean;
-    scaleRoot?: string;
-    scaleType?: ScaleType;
-}
-
-export interface ChordInputProps {
-    onChordChange: (chord: string) => void;
-    currentChord: string;
-}
-
-export interface ChordDisplayProps {
-    parseResult: ChordParseResult;
-    scaleRoot?: string;
-    scaleType?: ScaleType;
-}
