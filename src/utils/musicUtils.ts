@@ -1,5 +1,4 @@
 import type { GridCell, Note, ParsedChord, Scale, UniversalScale } from "../types";
-import { parseChord } from "./chordUtils";
 
 export const NOTES: string[] = [
     'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'

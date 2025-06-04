@@ -1,6 +1,5 @@
 import ChordGrid from './components/ChordGrid'
 import './App.css'
-import ChordDisplay from './components/ChordDisplay'
 import ChordInput from './components/ChordInput'
 import { ScaleInput } from './components/ScaleInput'
 

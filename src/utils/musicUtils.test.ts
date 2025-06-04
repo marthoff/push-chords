@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 import { buildGrid, buildScale, SCALES, shiftNote } from "./musicUtils";
 import { printGrid } from "./gridUtils";
+import { parseChord } from "./chordUtils";
 
 test('shift a note', () => {
     expect(shiftNote({ note: 'C', octave: 4 }, 2)).toEqual({ note: 'D', octave: 4 });
@@ -60,9 +61,10 @@ test('build a minor grid', () => {
 });
 
 test('build a chromatic grid', () => {
+    const chord = parseChord('C');
     const refScale = buildScale(SCALES.Major, 'D');
     const chromaticScale = buildScale(SCALES.Chromatic, 'C');
-    const grid = buildGrid(chromaticScale, 'C', refScale);
+    const grid = buildGrid(chromaticScale, chord.chord, refScale);
     expect(grid[0][0].note.note).toBe('C');
     expect(grid[7][0].note.note).toBe('B');
     expect(grid[7][0].note.octave).toBe(6);
