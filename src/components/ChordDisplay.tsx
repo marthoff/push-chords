@@ -25,21 +25,23 @@ const ChordDisplay: React.FC = ({
 
   return (
     <div className="chord-display">
-      <div className="chord-info">
-        <span className="chord-badge">{chord.root} {chord.quality}</span>
-        {extensionText && <span className="extension-badge">{extensionText}</span>}
-      </div>
-      <div className="notes-info">
-        {chord.notes.map((note, index) => (
-          <span
-            key={index}
-            className={`note ${isInScale(note.note) ? 'in-scale' : 'out-of-scale'}`}
-          >
-            {note.note}
-            <span className="text-sm">{note.interval}</span>
-            {index < chord.notes.length - 1 ? ', ' : ''}
-          </span>
-        ))}
+      <div className="chord-info flex gap-3">
+        <div>
+          <span className="chord-badge">{chord.root} {chord.quality}</span>
+          {extensionText && <span className="extension-badge">{extensionText}</span>}
+        </div>
+        <div>
+          {chord.notes.map((note, index) => (
+            <span
+              key={index}
+              className={`note ${isInScale(note.note) ? 'in-scale' : 'out-of-scale'}`}
+            >
+              {note.note}
+              <span className="text-sm">{note.interval}</span>
+              {index < chord.notes.length - 1 ? ', ' : ''}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

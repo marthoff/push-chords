@@ -20,7 +20,7 @@ function App() {
           </p>
         </div>
 
-        <div className=''>
+        <div className='flex'>
 
           <ChordInput />
           <ScaleInput />
