@@ -43,7 +43,6 @@ export const ScaleInput: React.FC = () => {
                 >
                     <option value="Major">Major</option>
                     <option value="Minor">Minor</option>
-                    <option value="Chromatic">Chromatic</option>
                 </select>
             </div>
             <div className="self-start">

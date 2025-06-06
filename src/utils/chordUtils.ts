@@ -57,12 +57,12 @@ export const parseChord = (chordName?: string): ChordParseResult => {
     return { isValid: false, error: 'Please enter a chord name' };
   }
 
-  const rootMatch = chordName.match(/^([A-G][#b]?)/);
+  const rootMatch = chordName.match(/^([a-gA-G][#b]?)/);
   if (!rootMatch) {
     return { isValid: false, error: 'Invalid root note. Must start with A-G' };
   }
 
-  const root = rootMatch[1];
+  const root = rootMatch[1].toLocaleUpperCase();
   let remaining = chordName.slice(root.length);
 
   let extensions: string[] = [];

@@ -1,6 +1,7 @@
 import React from 'react';
 import { buildScale, SCALES } from '../utils/musicUtils';
 import { usePushChordStore } from '../store/pushChordStore';
+import classNames from 'classnames';
 
 const ChordDisplay: React.FC = ({
 }) => {
@@ -25,22 +26,29 @@ const ChordDisplay: React.FC = ({
 
   return (
     <div className="chord-display">
-      <div className="chord-info flex gap-3">
+      <div className="chord-info">
         <div>
-          <span className="chord-badge">{chord.root} {chord.quality}</span>
+          <span className="font-bold">Chord: </span>{chord.root} {chord.quality}
           {extensionText && <span className="extension-badge">{extensionText}</span>}
         </div>
         <div>
+          <span className='font-bold'>Notes: </span>
           {chord.notes.map((note, index) => (
             <span
               key={index}
-              className={`note ${isInScale(note.note) ? 'in-scale' : 'out-of-scale'}`}
+              className={`${classNames({ '': !isInScale(note.note) })}`}
             >
               {note.note}
-              <span className="text-sm">{note.interval}</span>
+              <span className="text-sm">{note.interval.replace(/R/, 'Root')}</span>
+              {!isInScale(note.note) && (
+                <span className="text-red-500">*</span>
+              )}
               {index < chord.notes.length - 1 ? ', ' : ''}
             </span>
           ))}
+          {chord.notes.find(note => !isInScale(note.note)) && (
+            <div className="text-red-500 text-sm">* Not in scale</div>
+          )}
         </div>
       </div>
     </div>

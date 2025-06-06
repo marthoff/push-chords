@@ -8,8 +8,8 @@ const ChordInput: React.FC = () => {
   const parseChord = usePushChordStore((state) => state.parseChord);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    parseChord(e.target.value);
     setInputValue(e.target.value);
+    parseChord(e.target.value);
   };
 
   return (
