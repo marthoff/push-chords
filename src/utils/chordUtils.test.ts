@@ -42,7 +42,7 @@ describe("parseChord", () => {
       extensions: [],
       notes: [
         { note: "A", interval: "Root", semitones: 0 },
-        { note: "C", interval: "b3", semitones: 3 },
+        { note: "C", interval: "♭3", semitones: 3 },
         { note: "E", interval: "5", semitones: 7 },
       ],
     });
@@ -75,7 +75,7 @@ describe("parseChord", () => {
         { note: "C", interval: "Root", semitones: 0 },
         { note: "E", interval: "3", semitones: 4 },
         { note: "G", interval: "5", semitones: 7 },
-        { note: "A#", interval: "b7", semitones: 10 },
+        { note: "A#", interval: "♭7", semitones: 10 },
       ],
     });
   });
@@ -89,9 +89,9 @@ describe("parseChord", () => {
       extensions: [],
       notes: [
         { note: "A", interval: "Root", semitones: 0 },
-        { note: "C", interval: "b3", semitones: 3 },
+        { note: "C", interval: "♭3", semitones: 3 },
         { note: "E", interval: "5", semitones: 7 },
-        { note: "G", interval: "b7", semitones: 10 },
+        { note: "G", interval: "♭7", semitones: 10 },
       ],
     });
   });

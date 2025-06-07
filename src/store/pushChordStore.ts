@@ -20,7 +20,7 @@ export const usePushChordStore = create<PushChordState>()(
     chord: null,
     scaleRoot: "C",
     scaleType: "Major",
-    chromaticMode: false,
+    chromaticMode: true,
     parseChord: (chord: string) => {
       const parsedChord = parseChord(chord);
       set({ chord: parsedChord });

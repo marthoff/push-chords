@@ -171,6 +171,10 @@ function getChordNotes(parsed: ParsedChord): ChordNote[] {
       notes.push(transpose(root, 3)); // kleine Terz
       notes.push(transpose(root, 6)); // verminderte Quinte
       break;
+    case "half-diminished":
+      notes.push(transpose(root, 3)); // kleine Terz
+      notes.push(transpose(root, 6)); // verminderte Quinte
+      break;
     case "augmented":
       notes.push(transpose(root, 4)); // große Terz
       notes.push(transpose(root, 8)); // übermäßige Quinte
@@ -200,6 +204,9 @@ function getChordNotes(parsed: ParsedChord): ChordNote[] {
         notes.push(transpose(root, 10)); // kleine Septime
         break;
       case "dominant":
+        notes.push(transpose(root, 10)); // kleine Septime
+        break;
+      case "half-diminished":
         notes.push(transpose(root, 10)); // kleine Septime
         break;
       case "diminished":
@@ -234,34 +241,40 @@ function getChordNotes(parsed: ParsedChord): ChordNote[] {
 
 function getIntervalName(semitones: number): string {
   const intervalMap: { [semitone: number]: string } = {
+    // Grundstufe und einfache Intervalle
     0: "Root",
-    1: "b2",
+    1: "♭2",
     2: "2",
-    3: "b3",
+    3: "♭3",
     4: "3",
     5: "4",
-    6: "b5",
+    6: "♭5",
     7: "5",
-    8: "#5",
+    8: "♯5 / ♭6", // Enharmonisch
     9: "6",
-    10: "b7",
+    10: "♭7",
     11: "7",
-    12: "Octave",
-    13: "b9",
-    14: "9",
-    15: "#9",
-    16: "11",
-    17: "#11",
-    18: "b13",
-    19: "13",
-    20: "#13",
-    21: "Double Octave",
-  };
 
+    // Erweiterungen ab Oktave
+    12: "Octave",
+
+    13: "♭9",
+    14: "9",
+    15: "♯9",
+    16: "11",
+    17: "♯11",
+    18: "♭12 (selten)", // keine echte Extension, aber theoretisch korrekt
+    19: "12 (selten)", // theoretisch, kaum verwendet
+    20: "♭13",
+    21: "13",
+    22: "♯13",
+    23: "Major 7th + 13", // keine übliche Bezeichnung
+    24: "Double Octave",
+  };
   // Modulo 24, damit auch sehr hohe Werte korrekt aufgelöst werden
   const normalized = semitones % 24;
 
-  return intervalMap[normalized] || `${semitones} semitones`;
+  return intervalMap[normalized] || `${semitones}`;
 }
 
 export function stringifyChord(chord: ParsedChord): string {
