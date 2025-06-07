@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 const ChordDisplay: React.FC = ({
 }) => {
+
   const error = usePushChordStore((state) => state.error);
   const scaleType = usePushChordStore((state) => state.scaleType);
   const scaleRoot = usePushChordStore((state) => state.scaleRoot);
@@ -24,9 +25,10 @@ const ChordDisplay: React.FC = ({
     return scale.notes.includes(note);
   }
 
+
   return (
-    <div className="chord-display">
-      <div className="chord-info">
+    <div>
+      <div>
         <div>
           <span className="font-bold">Chord: </span>{chord.root} {chord.quality}
           {extensionText && <span className="extension-badge">{extensionText}</span>}
@@ -50,6 +52,7 @@ const ChordDisplay: React.FC = ({
             <div className="text-red-500 text-sm">* Not in scale</div>
           )}
         </div>
+
       </div>
     </div>
   );

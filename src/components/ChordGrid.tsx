@@ -24,9 +24,9 @@ const ChordGrid: React.FC = () => {
           {row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`m-2 p-2 text-center 
+              className={`m-1 p-1 text-center 
                 ${classNames({
-                'bg-blue-600': cell.isRoot && !cell.chordNote && cell.inScale,
+                'bg-yellow-600': cell.isRoot && !cell.chordNote && cell.inScale,
                 'bg-blue-700': cell.isRoot && cell.chordNote && cell.inScale,
                 'bg-blue-500': !cell.isRoot && cell.chordNote && cell.inScale,
                 'bg-blue-400': cell.chordNote && !cell.inScale,
