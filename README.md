@@ -4,7 +4,9 @@ A web app for exploring and generating musical chords for Ableton Push.
 
 ## Live Demo
 
-Access the app here: [https://marthoff.github.io/push-chords/](https://marthoff.github.io/push-chords/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d72be833-f520-4fe0-9723-d6e32080f3b1/deploy-status)](https://app.netlify.com/projects/push-chords/deploys)
+
+Access the app here: [https://push-chords.netlify.app/](https://push-chords.netlify.app/)
 
 ## License
 
