@@ -13,15 +13,21 @@ export const ChordProgressionBar: React.FC = () => {
   const clearProgression = usePushChordStore((state) => state.clearProgression);
 
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
   };
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
@@ -30,10 +36,12 @@ export const ChordProgressionBar: React.FC = () => {
       reorderProgression(draggedIndex, dropIndex);
     }
     setDraggedIndex(null);
+    setDragOverIndex(null);
   };
 
   const handleDragEnd = () => {
     setDraggedIndex(null);
+    setDragOverIndex(null);
   };
 
   if (chordProgression.length === 0) {
@@ -65,55 +73,90 @@ export const ChordProgressionBar: React.FC = () => {
       
       <div className="flex flex-wrap gap-2">
         {chordProgression.map((chord, index) => (
-          <div
-            key={`${index}-${stringifyChord(chord)}`}
-            draggable
-            onDragStart={(e) => handleDragStart(e, index)}
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, index)}
-            onDragEnd={handleDragEnd}
-            onClick={() => selectChordInProgression(index)}
-            className={classNames(
-              'group relative flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer transition-all duration-200 border-2',
-              {
-                'bg-white text-black border-white': selectedChordIndex === index,
-                'bg-gray-800 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-500': selectedChordIndex !== index,
-                'opacity-50': draggedIndex === index,
-              }
+          <React.Fragment key={`${index}-${stringifyChord(chord)}`}>
+            {/* Ghost chord appears before the drop target */}
+            {dragOverIndex === index && draggedIndex !== null && draggedIndex !== index && (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-md border-2 border-dashed border-blue-400 bg-blue-400/20 text-blue-400 transition-all duration-200">
+                <span className="font-semibold select-none">
+                  {stringifyChord(chordProgression[draggedIndex])}
+                </span>
+                <div className="w-5 h-5 rounded-full bg-blue-400 text-black text-xs flex items-center justify-center font-bold">
+                  {draggedIndex + 1}
+                </div>
+              </div>
             )}
-          >
-            <span className="font-semibold select-none">
-              {stringifyChord(chord)}
-            </span>
             
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removeChordFromProgression(index);
-              }}
+            <div
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, index)}
+              onDragEnd={handleDragEnd}
+              onClick={() => selectChordInProgression(index)}
               className={classNames(
-                'opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-600',
+                'group relative flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer transition-all duration-200 border-2',
                 {
-                  'hover:bg-gray-200': selectedChordIndex === index,
+                  'bg-white text-black border-white': selectedChordIndex === index,
+                  'bg-gray-800 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-500': selectedChordIndex !== index,
+                  'opacity-50': draggedIndex === index,
+                  'ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-900': dragOverIndex === index && draggedIndex !== index,
                 }
               )}
-              title="Remove chord"
             >
-              <XMarkIcon className="w-3 h-3" />
-            </button>
+              <span className="font-semibold select-none">
+                {stringifyChord(chord)}
+              </span>
+              
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeChordFromProgression(index);
+                }}
+                className={classNames(
+                  'opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-600',
+                  {
+                    'hover:bg-gray-200': selectedChordIndex === index,
+                  }
+                )}
+                title="Remove chord"
+              >
+                <XMarkIcon className="w-3 h-3" />
+              </button>
 
-            {/* Chord number indicator */}
-            <div className={classNames(
-              'absolute -top-2 -left-2 w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold',
-              {
-                'bg-black text-white': selectedChordIndex === index,
-                'bg-gray-600 text-white': selectedChordIndex !== index,
-              }
-            )}>
-              {index + 1}
+              {/* Chord number indicator */}
+              <div className={classNames(
+                'absolute -top-2 -left-2 w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold',
+                {
+                  'bg-black text-white': selectedChordIndex === index,
+                  'bg-gray-600 text-white': selectedChordIndex !== index,
+                }
+              )}>
+                {index + 1}
+              </div>
             </div>
-          </div>
+          </React.Fragment>
         ))}
+        
+        {/* Drop zone at the end */}
+        <div
+          onDragOver={(e) => handleDragOver(e, chordProgression.length)}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, chordProgression.length)}
+          className="min-w-[40px] min-h-[40px] flex items-center justify-center"
+        >
+          {/* Ghost chord at the end if dragging over the last position */}
+          {dragOverIndex === chordProgression.length && draggedIndex !== null && (
+            <div className="flex items-center gap-2 px-4 py-2 rounded-md border-2 border-dashed border-blue-400 bg-blue-400/20 text-blue-400 transition-all duration-200">
+              <span className="font-semibold select-none">
+                {stringifyChord(chordProgression[draggedIndex])}
+              </span>
+              <div className="w-5 h-5 rounded-full bg-blue-400 text-black text-xs flex items-center justify-center font-bold">
+                {draggedIndex + 1}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mt-3 text-xs text-gray-400">
