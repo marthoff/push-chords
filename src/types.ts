@@ -47,9 +47,9 @@ export type ChordQuality =
 export interface ParsedChord {
   root: string;
   quality: ChordQuality;
-  extensions: number[]; // z. B. [9, 13]
+  extensions: number[]; // e.g. [9, 13]
   hasSeventh: boolean;
-  notes: ChordNote[]; // resultierende Töne
+  notes: ChordNote[]; // resulting tones
 }
 
 export type ChordParseResult = {

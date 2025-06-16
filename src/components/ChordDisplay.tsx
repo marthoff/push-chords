@@ -3,7 +3,7 @@ import { buildScale, SCALES } from "../utils/musicUtils";
 import { usePushChordStore } from "../store/pushChordStore";
 import classNames from "classnames";
 
-const ChordDisplay: React.FC = ({}) => {
+const ChordDisplay: React.FC = () => {
   const error = usePushChordStore((state) => state.error);
   const scaleType = usePushChordStore((state) => state.scaleType);
   const scaleRoot = usePushChordStore((state) => state.scaleRoot);
@@ -37,7 +37,7 @@ const ChordDisplay: React.FC = ({}) => {
           {chord.notes.map((note, index) => (
             <span
               key={index}
-              className={`${classNames({ "": !isInScale(note.note) })}`}
+              className={classNames({ "text-gray-400": !isInScale(note.note) })}
             >
               {note.note}
               <span className="text-sm">{note.interval}</span>

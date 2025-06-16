@@ -7,7 +7,7 @@ export function parseChord(chord: string): ParsedChord {
   const rest = chord.slice(root.length);
 
   let quality: ChordQuality = "unknown";
-  let extensions: number[] = [];
+  const extensions: number[] = [];
   let hasSeventh = false;
 
   if (/^maj7/.test(rest)) {
@@ -330,7 +330,7 @@ export function stringifyChord(chord: ParsedChord): string {
       suffix = "";
   }
 
-  // Erweiterung kombinieren (z. B. C7 + 9 + 13 → C13)
+  // Extension combination (e.g. C7 + 9 + 13 -> C13)
   if (extensions.includes(13)) {
     suffix = suffix.replace(/7|maj7|m7|m/, ""); // Basis löschen
     suffix += "13";
