@@ -1,6 +1,7 @@
 import ChordGrid from './components/ChordGrid'
 import './App.css'
 import ControlPanel from './components/ControlPanel'
+import { ChordProgressionBar } from './components/ChordProgressionBar'
 
 function App() {
 
@@ -31,6 +32,13 @@ function App() {
       <div className="border-b border-gray-800 bg-black">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <ControlPanel />
+        </div>
+      </div>
+
+      {/* Chord Progression */}
+      <div className="border-b border-gray-800 bg-black">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <ChordProgressionBar />
         </div>
       </div>
 
